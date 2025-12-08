@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* Custom theme colors */
+@theme {
+  --color-labs-50: #f0fdf4;
+  --color-labs-100: #dcfce7;
+  --color-labs-200: #bbf7d0;
+  --color-labs-300: #86efac;
+  --color-labs-400: #4ade80;
+  --color-labs-500: #22c55e;
+  --color-labs-600: #16a34a;
+  --color-labs-700: #15803d;
+  --color-labs-800: #166534;
+  --color-labs-900: #14532d;
+}
+
+/* Animations */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+@keyframes speaking {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.speaking-indicator {
+  animation: speaking 0.5s ease-in-out infinite alternate;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}

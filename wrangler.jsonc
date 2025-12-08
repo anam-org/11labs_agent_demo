@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agent_11labs",
+  "compatibility_date": "2025-08-03",
+  "main": "./src/index.ts"
+}
