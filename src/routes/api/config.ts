@@ -25,7 +25,7 @@ export const Config = async (c: Context) => {
       body: JSON.stringify({
         personaConfig: {
           avatarId: avatarId,
-          enableAudioPassthrough: true,
+          avatarOnly: true,
         },
       }),
     });
