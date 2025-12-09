@@ -4,16 +4,9 @@
  * Main client - orchestrates the UI and connects the modules together.
  */
 
-import { base64ToArrayBuffer } from "chatdio";
 import { createClient } from "@anam-ai/js-sdk";
 import type AnamClient from "@anam-ai/js-sdk/dist/module/AnamClient";
 import { connectElevenLabs, stopElevenLabs } from "./elevenlabs";
-
-// Temporary type for new SDK feature (until types are updated)
-interface AudioPassthroughStream {
-  sendAudioChunk(data: string): void;
-  endOfSpeech(): void;
-}
 
 // ============================================================================
 // STATE
@@ -21,7 +14,6 @@ interface AudioPassthroughStream {
 
 let isConnected = false;
 let anamClient: AnamClient | null = null;
-let audioStream: AudioPassthroughStream | null = null;
 
 interface Config {
   anamSessionToken: string;
@@ -103,13 +95,19 @@ async function start() {
     const res = await fetch("/api/config");
     const config: Config = await res.json();
 
-    // Initialize Anam avatar (avatarOnly mode)
-    anamClient = createClient(config.anamSessionToken);
+    // Initialize Anam avatar with the audio stream
+    console.log("[Anam] Creating client...");
+    anamClient = createClient(config.anamSessionToken, {
+      disableInputAudio: true,
+    });
     await anamClient.streamToVideoElement("anam-video");
+    console.log(
+      "[Anam] Streaming to video element, session:",
+      anamClient.getActiveSessionId()
+    );
     showVideo(true);
 
-    // Create audio passthrough stream for faster-than-realtime delivery
-    audioStream = anamClient.createAudioPassthroughStream({
+    const agentAudioInputStream = anamClient.createAgentAudioInputStream({
       encoding: "pcm_s16le",
       sampleRate: 16000,
       channels: 1,
@@ -122,15 +120,15 @@ async function start() {
         addMessage("system", "Connected. Start speaking...");
       },
       onAudio: (audio) => {
-        audioStream?.sendAudioChunk(audio);
+        agentAudioInputStream.sendAudioChunk(audio);
       },
       onUserTranscript: (text) => addMessage("user", text),
       onAgentResponse: (text) => {
-        audioStream?.endOfSpeech();
+        agentAudioInputStream.endSequence();
         addMessage("agent", text);
       },
       onInterrupt: () => {
-        anamClient?.interruptPersona();
+        agentAudioInputStream.endSequence();
       },
       onDisconnect: () => setConnected(false),
       onError: () => showError("Connection error"),
@@ -148,7 +146,6 @@ async function stop() {
   stopElevenLabs();
   await anamClient?.stopStreaming();
   anamClient = null;
-  audioStream = null;
   showVideo(false);
   setConnected(false);
 }
