@@ -21,7 +21,7 @@ export const Index = (c: Context) => {
             >
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
-            <span>11labs + Anam Integration Demo</span>
+            <span>ElevenLabs + Anam Integration Demo</span>
           </div>
         </header>
 
