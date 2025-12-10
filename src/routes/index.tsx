@@ -30,12 +30,12 @@ export const Index = (c: Context) => {
           {/* Avatar video area */}
           <div
             id="avatar-container"
-            class="relative aspect-square max-w-xs mx-auto mb-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden"
+            class="relative aspect-video w-full mx-auto mb-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden"
           >
             {/* Video element for Anam avatar */}
             <video
               id="anam-video"
-              class="absolute inset-0 w-full h-full object-cover hidden"
+              class="absolute inset-0 w-full h-full object-contain hidden"
               autoplay
               playsinline
             />

@@ -128,6 +128,8 @@ async function start() {
         addMessage("agent", text);
       },
       onInterrupt: () => {
+        addMessage("agent", "Interrupted");
+        anamClient?.interruptPersona();
         agentAudioInputStream.endSequence();
       },
       onDisconnect: () => setConnected(false),
